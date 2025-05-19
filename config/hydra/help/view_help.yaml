@@ -1,0 +1,11 @@
+app_name: rbcview
+
+template: |-
+  Use this program to view RBC data.
+  usage:
+    ${hydra.help.app_name} [HYDRA CONFIG] [DATASET]
+
+  Hydra Configuration with defaults:
+  -------
+  $CONFIG
+  -------

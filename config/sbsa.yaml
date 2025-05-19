@@ -1,0 +1,52 @@
+# Config file for running the Single-Agent (SA) version of the RBC controller
+
+defaults:
+  - hydra: default
+  - paths: default
+  - env@train_env: default
+  - env@val_env: default
+  - _self_
+
+task: sbsa
+tags: null
+notes: null
+seed: null
+ra: 10_000
+dt: 0.025
+action_duration: 1.5
+reward_shaping: 0.15
+nr_neurons: 64
+
+train_env:
+  ra: ${ra}
+  dt: ${dt}
+  episode_length: 300
+  checkpoint: data/checkpoints/ra${ra}/train/
+  action_duration: ${action_duration}
+  reward_shaping: ${reward_shaping}
+
+val_env:
+  ra: ${ra}
+  dt: ${dt}
+  episode_length: 300
+  checkpoint: data/checkpoints/ra${ra}/validation/
+  action_duration: ${action_duration}
+  reward_shaping: 0
+
+# Stable baselines 3 parameters overrides
+sb3:
+  nr_processes: 2
+  nr_eval_processes: 2
+  #eval_episodes: 5 # just on rollout per worker, collecting nr_processes rollouts per evaluation
+  train_steps: 1200
+  eval_every: 10 # eval_every * nr_processes total episodes completed before evaluation. So PPO has then already been updated for eval_every / episodes_update times (has seen so many datasets)
+  train_checkpoint_every: 10 # same units as eval_every property.
+  frame_stack: 1 # number of observations to stack
+  ppo:
+    lr: 0.001
+    episodes_update: 1 # episodes_update * nr_processes total episodes per update
+    batch_size: 500 # 1 * 20 * 300 = 6000 timesteps in dataset for update. For 12 batches it means 6000 / 12 = 500 timesteps per minibatch
+    gamma: 0.99
+    ent_coef: 0.01
+    vf_coef: 0.5
+    nr_neurons: ${nr_neurons}
