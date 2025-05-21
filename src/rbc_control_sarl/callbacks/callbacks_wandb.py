@@ -6,7 +6,6 @@ from typing import Optional
 
 import numpy as np
 import seaborn as sns
-import sympy as sp
 import wandb
 from matplotlib import animation
 from matplotlib import pyplot as plt
@@ -104,7 +103,7 @@ class LogActionCallback(CallbackBase):
         if super().__call__(env, obs, reward, info):
             # get and save action
             self.ep_idx = episode_idx
-            action = env.action_effective
+            action = env.last_action
 
             # plot setup
             fig = plt.figure(figsize=(5, 3))
@@ -119,14 +118,11 @@ class LogActionCallback(CallbackBase):
             plt.yticks(ticks=[-0.75, 0, 0.75], labels=["-C", "0", "C"])
 
             # plot and save to wandb
-            y = sp.Symbol("y")
-            action_lambda = sp.lambdify(y, action, "numpy")
-            x_vals = np.linspace(0, 2 * sp.pi, 400)
-            y_vals = action_lambda(x_vals) - 2
+            x_vals = np.linspace(0, 2 * np.pi, len(action))
 
             # Plot the action and log to wandb
             if self.save_images:
-                plt.plot(x_vals, y_vals, label="Action", color="b")
+                plt.plot(x_vals, action, label="Action", color="b")
                 im = wandb.Image(fig, caption="action")
                 plt.tight_layout()
                 os.makedirs("actions/", exist_ok=True)
@@ -139,7 +135,7 @@ class LogActionCallback(CallbackBase):
                 )
 
             # save values for video
-            self.actions.append({"y": y_vals, "x": x_vals})
+            self.actions.append({"y": action, "x": x_vals})
 
     def reset(self):
         # plot actions

@@ -13,18 +13,18 @@ tags:
 
 # experiment configuration
 ra: 10_000
-experiment_dir: logs/models/ppo_sbsa/ra${ra}
+experiment_dir: ${paths.work_dir}/logs/models/ppo_sbsa/ra${ra}
 model_name: "best_model"
 debug_cell_dist: False
 
 # fixed parameters
 nr_episodes: 20
-render_mode: "rgb_array"
 fps: 4
 heater_duration: 1.5
 
 env:
   ra: ${ra}
   episode_length: 300
-  checkpoint: data/checkpoints/ra${ra}/test/
-  heater_duration: ${action_duration}
+  checkpoint: ${paths.data_dir}/checkpoints/test/ckpt_ra${ra}.h5
+  heater_duration: ${heater_duration}
+  render_mode: "rgb_array"

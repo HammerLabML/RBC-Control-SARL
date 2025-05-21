@@ -10,6 +10,7 @@ import wandb
 import yaml
 import gymnasium as gym
 from gymnasium.wrappers import FlattenObservation, FrameStackObservation
+from rbc_gym.wrappers import RBCNormalizeObservation, RBCRewardShaping
 from hydra.core.hydra_config import HydraConfig
 from matplotlib import pyplot as plt
 from omegaconf import DictConfig, OmegaConf, open_dict
@@ -20,7 +21,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from wandb import Table, Video
 
 
-@hydra.main(version_base=None, config_path="config", config_name="sbsa_eval")
+@hydra.main(version_base=None, config_path="../config", config_name="sbsa_eval")
 def main(cfg: DictConfig) -> None:
     # Configure logging
     output_dir = HydraConfig.get().runtime.output_dir
@@ -60,14 +61,20 @@ def main(cfg: DictConfig) -> None:
     env = make_vec_env(
         lambda: FrameStackObservation(
             FlattenObservation(
-                gym.make(
-                    "rbc_gym/RayleighBenardConvection2D-v0",
-                    render_mode=cfg.env.render_mode,
-                    rayleigh_number=cfg.env.ra,
-                    episode_length=cfg.env.episode_length,
-                    heater_duration=cfg.env.heater_duration,
-                    checkpoint_dir=cfg.env.checkpoint_dir,
-                    use_gpu=cfg.env.use_gpu,
+                RBCRewardShaping(
+                    RBCNormalizeObservation(
+                        gym.make(
+                            "rbc_gym/RayleighBenardConvection2D-v0",
+                            render_mode=cfg.env.render_mode,
+                            rayleigh_number=cfg.env.ra,
+                            episode_length=cfg.env.episode_length,
+                            heater_duration=cfg.env.heater_duration,
+                            checkpoint=cfg.env.checkpoint,
+                            use_gpu=cfg.env.use_gpu,
+                        ),
+                        heater_limit=cfg.env.heater_limit,
+                    ),
+                    shaping_weight=0,
                 )
             ),
             stack_size=config.sb3.frame_stack,
@@ -108,9 +115,9 @@ def main(cfg: DictConfig) -> None:
             # get next action
             action, _ = policy.predict(obs, deterministic=True)
             # save data
-            if cfg.render_mode == "human":
+            if cfg.env.render_mode == "human":
                 env.render()
-            elif cfg.render_mode == "rgb_array":
+            elif cfg.env.render_mode == "rgb_array":
                 screens.append(env.render().transpose(2, 0, 1))
             actions.append(action.squeeze())
             # perform step in env
@@ -120,7 +127,7 @@ def main(cfg: DictConfig) -> None:
             wandb.log(
                 {
                     f"ep{idx}/time": info[0]["t"],
-                    f"ep{idx}/nusselt_state": info[0]["nusselt"],
+                    f"ep{idx}/nusselt_state": info[0]["nusselt_state"],
                     f"ep{idx}/nusselt_obs": info[0]["nusselt_obs"],
                     f"ep{idx}/reward": rewards[0],
                     f"ep{idx}/cell_dist": info[0]["cell_dist"],

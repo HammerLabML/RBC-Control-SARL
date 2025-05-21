@@ -2,7 +2,7 @@
 use_gpu: false
 render_mode: null
 # checkpoint
-checkpoint_dir: "${paths.data_dir}/checkpoints/"
+checkpoint: "${paths.data_dir}/checkpoints/test/ckpt_ra${ra}.h5"
 # simulation
 episode_length: 120
 ra: 10_000
@@ -11,4 +11,6 @@ heater_limit: 0.75
 heater_segments: 12
 heater_duration: 1.0
 heater_start: 0.0
-heater_end: 400
+heater_end: 600
+# reward config
+reward_shaping: 0

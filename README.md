@@ -61,11 +61,12 @@ If you find our work useful, please cite us via:
 ```
 
 ## Setup
+We use [uv](https://docs.astral.sh/uv/) to manage python dependencies.
 ```bash
-pip install ...
+uv sync
 ```
 
 ## How to run
 ```bash
-python ...
+uv run python scripts/sbsa.py
 ```

@@ -6,6 +6,11 @@ from os.path import join
 
 import gymnasium as gym
 from gymnasium.wrappers import FlattenObservation, FrameStackObservation
+from rbc_gym.wrappers import (
+    RBCNormalizeObservation,
+    RBCNormalizeReward,
+    RBCRewardShaping,
+)
 
 import hydra
 from hydra.core.hydra_config import HydraConfig
@@ -57,36 +62,39 @@ def main(cfg: DictConfig) -> None:
     logger.info(f"Logging results wandb run {run.project}/{run.name}")
 
     # Construct the evaluation and training environments
-    def create_env(env_cfg, env_id="0", render_mode=None):
+    def create_env(env_cfg):
         env = gym.make(
             "rbc_gym/RayleighBenardConvection2D-v0",
-            render_mode=render_mode,
+            render_mode=env_cfg.render_mode,
             rayleigh_number=env_cfg.ra,
             episode_length=env_cfg.episode_length,
             heater_duration=env_cfg.heater_duration,
-            checkpoint_dir=env_cfg.checkpoint_dir,
+            checkpoint=env_cfg.checkpoint,
             use_gpu=env_cfg.use_gpu,
         )
+        env = RBCNormalizeObservation(env, heater_limit=env_cfg.heater_limit)
+        env = RBCNormalizeReward(env)
+        env = RBCRewardShaping(env, shaping_weight=env_cfg.reward_shaping)
         env = FlattenObservation(env)
         env = FrameStackObservation(env, cfg.sb3.frame_stack)
         return env
 
     train_env = SubprocVecEnv(
         [
-            lambda i=i: create_env(cfg.train_env, f"train_{i}")
+            lambda i=i: create_env(cfg.train_env)
             for i in range(1, cfg.sb3.nr_processes + 1)
         ]
     )
     val_env = SubprocVecEnv(
         [
-            lambda i=i: create_env(cfg.val_env, f"val_{i}")
+            lambda i=i: create_env(cfg.val_env)
             for i in range(1, cfg.sb3.nr_eval_processes + 1)
         ]
     )
 
     # Parameters
     steps_per_iteration = cfg.sb3.ppo.episodes_update * int(
-        cfg.train_env.episode_length / cfg.train_env.action_duration
+        cfg.train_env.episode_length / cfg.train_env.heater_duration
     )
 
     # Policy model
@@ -115,7 +123,7 @@ def main(cfg: DictConfig) -> None:
     os.makedirs(dir_model, exist_ok=True)
     checkpoint_cb_training = CheckpointCallback(
         save_freq=cfg.sb3.train_checkpoint_every
-        * int(cfg.train_env.episode_length / cfg.train_env.action_duration),
+        * int(cfg.train_env.episode_length / cfg.train_env.heater_duration),
         save_path=dir_model,
         name_prefix="PPO_train",
     )
