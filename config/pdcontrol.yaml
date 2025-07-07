@@ -1,0 +1,29 @@
+defaults:
+  - hydra: default
+  - paths: default
+  - env: default
+  - _self_
+
+task: pdcontrol
+seed: null
+interval: 1
+
+# params
+baseline: False
+nr_episodes: 1
+
+env:
+  ra: 10_000
+  episode_length: 300
+  heater_duration: 1.5
+  render_mode: rgb_array
+
+controller:
+  kp: 970
+  kd: 2000
+  bcT: [2, 1]
+  limit: ${env.heater_limit}
+  start: 0.0
+  end: ${env.episode_length}
+  heater_duration: ${env.heater_duration}
+  heater_segments: ${env.heater_segments}

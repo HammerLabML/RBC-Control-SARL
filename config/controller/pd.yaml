@@ -1,0 +1,5 @@
+_target_: rbcdata.control.PDController
+kp: 970
+kd: 2000
+bcT: [2, 1]
+limit: 0.75

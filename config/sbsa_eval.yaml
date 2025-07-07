@@ -1,0 +1,30 @@
+# Config file for evaluating the Single-Agent (SA) version of the RBC controller
+
+defaults:
+  - hydra: default
+  - env: default
+  - paths: default
+  - _self_
+
+# wandb configuration
+task: sbsa_eval
+tags:
+  - eval
+
+# experiment configuration
+ra: 10_000
+experiment_dir: ${paths.work_dir}/logs/models/ppo_sbsa/ra${ra}
+model_name: "best_model"
+debug_cell_dist: False
+
+# fixed parameters
+nr_episodes: 20
+fps: 4
+heater_duration: 1.5
+
+env:
+  ra: ${ra}
+  episode_length: 300
+  checkpoint: ${paths.data_dir}/checkpoints/test/ckpt_ra${ra}.h5
+  heater_duration: ${heater_duration}
+  render_mode: "rgb_array"

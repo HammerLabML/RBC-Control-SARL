@@ -1,0 +1,18 @@
+defaults:
+  - hydra: default
+  - paths: default
+  - env: default
+  - _self_
+
+task: run
+seed: null
+interval: 1
+
+env:
+  ra: 10_000
+  episode_length: 300
+  heater_duration: 1.0
+
+hydra:
+  job:
+    chdir: true
