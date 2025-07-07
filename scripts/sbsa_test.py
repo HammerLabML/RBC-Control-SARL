@@ -12,7 +12,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.logger import configure
 
 
-@hydra.main(version_base=None, config_path="../config", config_name="sbsa_eval")
+@hydra.main(version_base=None, config_path="../config", config_name="sbsa_test")
 def main(cfg: DictConfig) -> None:
     # Configure logging
     output_dir = HydraConfig.get().runtime.output_dir
