@@ -70,7 +70,6 @@ def main(cfg: DictConfig) -> None:
             episode_length=env_cfg.episode_length,
             heater_duration=env_cfg.heater_duration,
             checkpoint=env_cfg.checkpoint,
-            use_gpu=env_cfg.use_gpu,
         )
         env = RBCNormalizeObservation(env, heater_limit=env_cfg.heater_limit)
         env = RBCNormalizeReward(env)

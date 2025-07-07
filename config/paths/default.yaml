@@ -9,3 +9,6 @@ output_dir: ${hydra:runtime.output_dir}
 
 # path to working directory
 work_dir: ${hydra:runtime.cwd}
+
+# path to model weights
+model_dir: ${hydra:runtime.cwd}/models/
