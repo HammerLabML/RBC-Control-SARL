@@ -10,6 +10,6 @@
 #SBATCH --mail-type=FAIL
 
 cd ~/RBC-Control-SARL
-srun uv run python scripts/dataset_control.py dataset.total=20 dataset.type=ppo
-srun uv run python scripts/dataset_control.py dataset.total=10 dataset.type=random
-srun uv run python scripts/dataset_control.py dataset.total=10 dataset.type=zero
+srun uv run python scripts/dataset_control.py -m base_seed=100 split=train dataset.type=ppo,random,zero
+srun uv run python scripts/dataset_control.py -m base_seed=400 split=val dataset.type=ppo,random,zero
+srun uv run python scripts/dataset_control.py -m base_seed=800 split=test dataset.type=ppo,random,zero

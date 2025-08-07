@@ -47,16 +47,23 @@ def main(cfg: DictConfig) -> None:
     control_steps = cfg.control_steps
 
     # load trained policy
-    model_path = join(cfg.experiment_dir, "model", cfg.model_name)
+    model_path = join(cfg.model_dir, "model", cfg.model_name)
     policy = PPO.load(model_path, env=env)
 
     # Set up h5 dataset
-    dir = "data/datasets/2D-control"
-    path = f"{dir}/ra{cfg.ra}/{cfg.dataset.type}.h5"
+    path = f"{cfg.out_dir}/{cfg.dataset.type}.h5"
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with h5py.File(path, "w") as file:
         # Save commonly used parameters of the simulation
-        file.attrs["ra"] = cfg.ra
+        file.attrs["episodes"] = total_epsiodes
+        file.attrs["steps"] = steps
+        file.attrs["ra"] = cfg.env.rayleigh_number
+        file.attrs["shape"] = shape
+        file.attrs["dt"] = cfg.env.heater_duration
+        file.attrs["timesteps"] = cfg.env.episode_length
+        file.attrs["segments"] = segments
+        file.attrs["limit"] = cfg.env.heater_limit
+        file.attrs["base_seed"] = base_seed
 
         for i in range(cfg.dataset.total):
             # states
