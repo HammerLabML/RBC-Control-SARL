@@ -11,6 +11,11 @@ Here we give some of the examples from our paper.
 TODO: Add the uncontrolled scenarios to the file.
 
 ## Comparison of Domain-Informed Reinforcement Learning and Uninformed Reinforcement Learning
+We make a compelling case for the inclusion of domain knowledge to efficiently obtain robust control of chaotic flows. On the left is the typical performance of a Domain-Informed agent on a random initial condition, and on the right is the typical performance of an uninformed agent. Althoug the both agents achieve a similar reduction of average convective heat transfer, note the large qualitative differences in the obtained flows:
+
+- The domain-informed agent eventually achieves **almost steady flow and remains at this state**
+- The uninformed agent possesses **considerably unsteady flow.**
+
 |  Domain-Informed                   |                Uninformed|
 |:-----------------------------------:|:-----------------------------------:|
 | $Ra=10^4$ | $Ra=10^4$ |

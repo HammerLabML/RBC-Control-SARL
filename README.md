@@ -1,10 +1,21 @@
 # Control of Rayleigh-Bénard Convection: Effectiveness of Reinforcement Learning in the Turbulent Regime
 
-## Examples
+
 
 <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
 <a href="https://hydra.cc/"><img alt="Config: Hydra" src="https://img.shields.io/badge/Config-Hydra-89b8cd"></a>
 [![arXiv](https://img.shields.io/badge/arXiv-2405.06425-red.svg)](https://arxiv.org/abs/2504.12000)
+
+## Examples
+We make a compelling case for the inclusion of domain knowledge to efficiently obtain robust control of chaotic flows. On the left is the typical performance of a Domain-Informed agent on a random initial condition, and on the right is the typical performance of an uninformed agent. Althoug the both agents achieve a similar reduction of average convective heat transfer under initially chaotic flow conditions, note the large qualitative differences in the flows that are eventually obtained:
+
+- The domain-informed agent eventually achieves **almost steady flow.**
+- The uninformed agent possesses **considerably unsteady flow.**
+
+|  Domain-Informed                   |                Uninformed|
+|:-----------------------------------:|:-----------------------------------:|
+| $Ra=10^5$ | $Ra=10^5$ |
+| ![alt text](videos/Ra1e5.gif) | ![alt text](videos/Ra1e5_NoRS.gif) |
 
 ## Abstract
 Data-driven flow control has significant potential for indus-
