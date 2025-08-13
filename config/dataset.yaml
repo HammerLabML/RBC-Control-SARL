@@ -1,0 +1,31 @@
+defaults:
+  - hydra: default
+  - env: default
+  - paths: default
+  - _self_
+
+# wandb configuration
+task: dataset_control
+
+# experiment configuration
+ra: 10_000
+parallel: 5
+base_seed: 42
+model_dir: ${paths.model_dir}/ra${ra}
+model_name: "best_model"
+control_steps: 6
+split: "train"
+out_dir: ${paths.data_dir}/datasets/2D-control/${split}/ra${ra}
+
+# environment
+env:
+  render_mode: null
+  rayleigh_number: ${ra}
+  episode_length: 100
+  checkpoint: ${paths.data_dir}/checkpoints/${split}/ckpt_ra${ra}.h5
+  heater_duration: 0.25
+
+# dataset configuration
+dataset:
+  type: "ppo" # types: "ppo", "random", or "zero"
+  total: 20
