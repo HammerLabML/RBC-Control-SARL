@@ -1,5 +1,6 @@
 # Examples
-Here we give some of the examples from our paper.
+Here we give videos of the control of domain-informed agents and compare to uninformed agents.
+Note that all examples are typical representatives of the obtained flows. 
 
 ## Uncontrolled Rayleigh Bénard
 |  Uncontrolled flow $Ra=10^4$                     |                Uncontrolled flow $Ra=10^5$|
@@ -10,10 +11,11 @@ Here we give some of the examples from our paper.
 
 
 ## Experiment 1 and 2 (Flow control of RBC) Comparison of Domain-Informed Reinforcement Learning and Uninformed Reinforcement Learning
-We make a compelling case for the inclusion of domain knowledge to efficiently obtain robust control of chaotic flows. On the left is the typical performance of a Domain-Informed agent on a random initial condition, and on the right is the typical performance of an uninformed agent. Althoug the both agents achieve a similar reduction of average convective heat transfer, note the large qualitative differences in the obtained flows:
+We show that the inclusion of domain knowledge lead to effcicient robust control of chaotic flows. On the left is the typical performance of a Domain-Informed agent on a random initial condition, and on the right is the typical performance of an uninformed agent. Althoug the both agents achieve a similar reduction of average convective heat transfer, note the large qualitative differences in the obtained flows for $Ra=10^4$ and $Ra=10^5$:
 
-- The domain-informed agent eventually achieves **almost steady flow and remains at this state**
-- The uninformed agent possesses **considerably unsteady flow.**
+The uninformed agent typically exhibits destabalization effects for $Ra=10^4$ (see end of episode), whereas the domain-informed agent keeps the flow steady. For $Ra=10^5$, the domain-informed agent also achieves a stable steady flow, whereas the uninformed agent fails to merge cells and exhibits unsteady flow.
+
+
 
 |  Domain-Informed                   |                Uninformed|
 |:-----------------------------------:|:-----------------------------------:|
