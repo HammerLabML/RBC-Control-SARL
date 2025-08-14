@@ -9,8 +9,8 @@
 ## Examples
 We make a compelling case for the inclusion of domain knowledge to efficiently obtain robust control of chaotic flows. On the left is the typical performance of a Domain-Informed agent on a random initial condition, and on the right is the typical performance of an uninformed agent. Althoug the both agents achieve a similar reduction of average convective heat transfer under initially chaotic flow conditions, note the large qualitative differences in the flows that are eventually obtained:
 
-- The domain-informed agent eventually achieves **almost steady flow.**
-- The uninformed agent possesses **considerably unsteady flow.**
+- The domain-informed agent always achieves **steady flow**, and keeps this state stable.
+- The uninformed agent exhibits **a significantly unsteady flow.**
 
 |  Domain-Informed                   |                Uninformed|
 |:-----------------------------------:|:-----------------------------------:|
