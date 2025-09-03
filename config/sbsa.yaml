@@ -13,7 +13,7 @@ notes: null
 seed: null
 
 ra: 10_000
-heater_duration: 1.5
+heater_duration: 1
 reward_shaping: 0
 nr_neurons: 64
 
@@ -33,7 +33,7 @@ val_env:
 
 # Stable baselines 3 parameters overrides
 sb3:
-  nr_processes: 20
+  nr_processes: 6
   nr_eval_processes: 5
   #eval_episodes: 5 # just on rollout per worker, collecting nr_processes rollouts per evaluation
   train_steps: 400000
@@ -43,7 +43,7 @@ sb3:
   ppo:
     lr: 0.001
     episodes_update: 1 # episodes_update * nr_processes total episodes per update
-    batch_size: 500 # 1*20*300=6000 timesteps in dataset for update. For 12 batches it means 6000 / 12 = 500 timesteps per minibatch
+    batch_size: 600 # 1*20*300=6000 timesteps in dataset for update. For 10 batches it means 6000 / 10 = 500 timesteps per minibatch
     gamma: 0.99
     ent_coef: 0.01
     vf_coef: 0.5
