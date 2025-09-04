@@ -64,6 +64,7 @@ def main(cfg: DictConfig) -> None:
         file.attrs["segments"] = segments
         file.attrs["limit"] = cfg.env.heater_limit
         file.attrs["base_seed"] = base_seed
+        file.attrs["control_steps"] = control_steps
 
         for i in range(cfg.dataset.total):
             # states
