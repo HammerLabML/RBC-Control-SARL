@@ -7,11 +7,11 @@ defaults:
   - _self_
 
 # wandb configuration
-task: sbsa_eval
+task: sbsa_test
 
 # experiment configuration
 ra: 10_000
-experiment_dir: ${paths.model_dir}/ra${ra}
+experiment_dir: ${paths.model_dir}/ra10000_new
 model_name: "best_model"
 
 # environment
@@ -19,4 +19,5 @@ env:
   ra: ${ra}
   episode_length: 300
   checkpoint: ${paths.data_dir}/checkpoints/test/ckpt_ra${ra}.h5
-  heater_duration: 1.5
+  heater_duration: 1
+  control_modes: 4

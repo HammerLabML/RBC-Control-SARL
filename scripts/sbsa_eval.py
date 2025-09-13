@@ -70,6 +70,7 @@ def main(cfg: DictConfig) -> None:
                             episode_length=cfg.env.episode_length,
                             heater_duration=cfg.env.heater_duration,
                             checkpoint=cfg.env.checkpoint,
+                            modes=cfg.env.control_modes,
                             use_gpu=cfg.env.use_gpu,
                         ),
                         heater_limit=cfg.env.heater_limit,
@@ -138,7 +139,7 @@ def main(cfg: DictConfig) -> None:
             times.append(info[0]["t"])
             episode.append(idx)
         # plot data
-        plot_actions(actions, output_dir, idx, fps=cfg.fps)
+        #plot_actions(actions, output_dir, idx, fps=cfg.fps)
         wandb.log(
             {
                 f"ep{idx}/video": Video(np.asarray(screens), fps=cfg.fps, format="mp4"),

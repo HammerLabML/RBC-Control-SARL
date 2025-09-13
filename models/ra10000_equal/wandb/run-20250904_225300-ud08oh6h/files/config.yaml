@@ -1,0 +1,265 @@
+_current_progress_remaining:
+    value: 1
+_custom_logger:
+    value: "True"
+_episode_num:
+    value: 0
+_last_episode_starts:
+    value: |-
+        [ True  True  True  True  True  True  True  True  True  True  True  True
+          True  True  True  True  True  True  True  True]
+_last_obs:
+    value: |-
+        [[[ 0.08245778  0.07526851  0.06920493 ... -0.02286822 -0.07179391
+           -0.10903543]]
+
+         [[ 0.08245778  0.07526851  0.06920493 ... -0.02286822 -0.07179391
+           -0.10903543]]
+
+         [[ 0.0707643   0.06612694  0.06431639 ... -0.09841096 -0.1249541
+           -0.13070315]]
+
+         ...
+
+         [[ 0.12617862  0.12069523  0.11463356 ...  0.21610725  0.24224472
+            0.23132432]]
+
+         [[ 0.06868243  0.07457078  0.0817014  ... -0.10128856 -0.09085584
+           -0.09250671]]
+
+         [[ 0.09546912  0.10293162  0.10997856 ... -0.12317568 -0.13086843
+           -0.11734438]]]
+_last_original_obs:
+    value: None
+_logger:
+    value: <stable_baselines3.common.logger.Logger object at 0x75de472b8c10>
+_n_updates:
+    value: 0
+_num_timesteps_at_start:
+    value: 0
+_stats_window_size:
+    value: 100
+_total_timesteps:
+    value: 1000000
+_vec_normalize_env:
+    value: None
+_wandb:
+    value:
+        cli_version: 0.21.3
+        e:
+            e2sbnt7x9atet3tay2jpzgu0acamm4lu:
+                codePath: scripts/sbsa.py
+                cpu_count: 120
+                cpu_count_logical: 120
+                disk:
+                    /:
+                        total: "105724903424"
+                        used: "60238569472"
+                email: tmarkmann@techfak.uni-bielefeld.de
+                executable: /homes/tmarkmann/RBC-Control-SARL/.venv/bin/python3
+                git:
+                    commit: 1b7876bb80a5dfc7050533eda442f26bf760829c
+                    remote: git@github.com:HammerLabML/RBC-Control-SARL.git
+                host: worker-11.GPU.CIT-EC.NET
+                memory:
+                    total: "475265306624"
+                os: Linux-6.8.0-59-generic-x86_64-with-glibc2.35
+                program: /homes/tmarkmann/RBC-Control-SARL/scripts/sbsa.py
+                python: CPython 3.11.12
+                root: /homes/tmarkmann/RBC-Control-SARL/logs/sbsa/09-04-22-52-59-784871
+                slurm:
+                    cluster_name: gpuv2
+                    conf: /etc/slurm/slurm.conf
+                    cpus_on_node: "23"
+                    cpus_per_task: "23"
+                    distribution: cyclic
+                    gtids: "0"
+                    job_account: default
+                    job_cpus_per_node: "23"
+                    job_cpus_per_node_pack_group_0: "23"
+                    job_gid: "34000"
+                    job_id: "162083"
+                    job_name: sbsa
+                    job_nodelist: worker-11
+                    job_num_nodes: "1"
+                    job_partition: gpu
+                    job_qos: normal
+                    job_uid: "26859"
+                    job_user: tmarkmann
+                    jobid: "162083"
+                    launch_node_ipaddr: 129.70.150.155
+                    localid: "0"
+                    mem_per_node: "65536"
+                    nnodes: "1"
+                    node_aliases: (null)
+                    nodeid: "0"
+                    nodelist: worker-11
+                    nprocs: "1"
+                    ntasks: "1"
+                    prio_process: "0"
+                    procid: "0"
+                    srun_comm_host: 129.70.150.155
+                    srun_comm_port: "43607"
+                    step_id: "0"
+                    step_launcher_port: "43607"
+                    step_nodelist: worker-11
+                    step_num_nodes: "1"
+                    step_num_tasks: "1"
+                    step_tasks_per_node: "1"
+                    stepid: "0"
+                    submit_dir: /homes/tmarkmann/RBC-Control-SARL/slurm
+                    submit_host: login-1.GPU.CIT-EC.NET
+                    task_pid: "3576040"
+                    tasks_per_node: "1"
+                    topology_addr: worker-11
+                    topology_addr_pattern: node
+                    umask: "0022"
+                    working_cluster: gpuv2:controller-1.GPU.CIT-EC.NET:6817:9472:109
+                startedAt: "2025-09-04T20:53:00.162312Z"
+                writerId: e2sbnt7x9atet3tay2jpzgu0acamm4lu
+        m: []
+        python_version: 3.11.12
+        t:
+            "1":
+                - 1
+                - 50
+            "2":
+                - 1
+                - 50
+            "3":
+                - 2
+                - 16
+                - 17
+                - 22
+                - 35
+            "4": 3.11.12
+            "5": 0.21.3
+            "12": 0.21.3
+            "13": linux-x86_64
+action_noise:
+    value: None
+action_space:
+    value: Box(-1.0, 1.0, (8,), float32)
+algo:
+    value: PPO
+batch_size:
+    value: 500
+clip_range:
+    value: FloatSchedule(ConstantSchedule(val=0.2))
+clip_range_vf:
+    value: None
+control_modes:
+    value: 4
+control_scheme:
+    value: equal
+device:
+    value: cpu
+ent_coef:
+    value: 0.01
+env:
+    value: <stable_baselines3.common.vec_env.subproc_vec_env.SubprocVecEnv object at 0x75de471ed410>
+ep_info_buffer:
+    value: deque([], maxlen=100)
+ep_success_buffer:
+    value: deque([], maxlen=100)
+gae_lambda:
+    value: 0.95
+gamma:
+    value: 0.99
+heater_duration:
+    value: 1
+learning_rate:
+    value: 0.001
+lr_schedule:
+    value: FloatSchedule(ConstantSchedule(val=0.001))
+max_grad_norm:
+    value: 0.5
+n_envs:
+    value: 20
+n_epochs:
+    value: 10
+n_steps:
+    value: 300
+normalize_advantage:
+    value: "True"
+notes:
+    value: null
+nr_neurons:
+    value: 64
+num_timesteps:
+    value: 0
+observation_space:
+    value: Box(-1.3, 1.3, (1, 1152), float32)
+output_dir:
+    value: /homes/tmarkmann/RBC-Control-SARL/logs/sbsa/09-04-22-52-59-784871
+paths:
+    value: '{''data_dir'': ''/homes/tmarkmann/RBC-Control-SARL/data/'', ''log_dir'': ''/homes/tmarkmann/RBC-Control-SARL/logs/'', ''output_dir'': ''/homes/tmarkmann/RBC-Control-SARL/logs/sbsa/09-04-22-52-59-784871'', ''work_dir'': ''/homes/tmarkmann/RBC-Control-SARL'', ''model_dir'': ''/homes/tmarkmann/RBC-Control-SARL/models/''}'
+policy:
+    value: |-
+        ActorCriticPolicy(
+          (features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (pi_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (vf_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (mlp_extractor): MlpExtractor(
+            (policy_net): Sequential(
+              (0): Linear(in_features=1152, out_features=64, bias=True)
+              (1): ReLU()
+              (2): Linear(in_features=64, out_features=64, bias=True)
+              (3): ReLU()
+            )
+            (value_net): Sequential(
+              (0): Linear(in_features=1152, out_features=64, bias=True)
+              (1): ReLU()
+              (2): Linear(in_features=64, out_features=64, bias=True)
+              (3): ReLU()
+            )
+          )
+          (action_net): Linear(in_features=64, out_features=8, bias=True)
+          (value_net): Linear(in_features=64, out_features=1, bias=True)
+        )
+policy_class:
+    value: <class 'stable_baselines3.common.policies.ActorCriticPolicy'>
+policy_kwargs:
+    value: '{''activation_fn'': <class ''torch.nn.modules.activation.ReLU''>, ''net_arch'': {''pi'': [64, 64], ''vf'': [64, 64]}}'
+ra:
+    value: 10000
+reward_shaping:
+    value: 0
+rollout_buffer:
+    value: <stable_baselines3.common.buffers.RolloutBuffer object at 0x75de4730e010>
+rollout_buffer_class:
+    value: <class 'stable_baselines3.common.buffers.RolloutBuffer'>
+rollout_buffer_kwargs:
+    value: '{}'
+sb3:
+    value: '{''nr_processes'': 20, ''nr_eval_processes'': 5, ''train_steps'': 1000000, ''eval_every'': 10, ''train_checkpoint_every'': 10, ''frame_stack'': 1, ''ppo'': {''lr'': 0.001, ''episodes_update'': 1, ''batch_size'': 500, ''gamma'': 0.99, ''ent_coef'': 0.01, ''vf_coef'': 0.5, ''nr_neurons'': 64}}'
+sde_sample_freq:
+    value: -1
+seed:
+    value: null
+start_time:
+    value: 1757019266311091081
+tags:
+    value: null
+target_kl:
+    value: None
+task:
+    value: sbsa
+tensorboard_log:
+    value: None
+train_env:
+    value: '{''use_gpu'': False, ''render_mode'': None, ''checkpoint'': ''/homes/tmarkmann/RBC-Control-SARL/data//checkpoints/train/ckpt_ra10000.h5'', ''episode_length'': 300, ''rayleigh_number'': 10000, ''pressure'': False, ''heater_limit'': 0.75, ''heater_segments'': 12, ''heater_duration'': 1, ''control_modes'': 4, ''coeff_scheme'': ''equal'', ''ra'': 10000, ''reward_shaping'': 0}'
+use_sde:
+    value: "False"
+val_env:
+    value: '{''use_gpu'': False, ''render_mode'': None, ''checkpoint'': ''/homes/tmarkmann/RBC-Control-SARL/data//checkpoints/val/ckpt_ra10000.h5'', ''episode_length'': 300, ''rayleigh_number'': 10000, ''pressure'': False, ''heater_limit'': 0.75, ''heater_segments'': 12, ''heater_duration'': 1, ''control_modes'': 4, ''coeff_scheme'': ''equal'', ''ra'': 10000, ''reward_shaping'': 0}'
+verbose:
+    value: 1
+vf_coef:
+    value: 0.5

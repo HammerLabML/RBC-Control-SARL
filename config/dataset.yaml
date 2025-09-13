@@ -11,7 +11,7 @@ task: dataset_control
 ra: 10_000
 parallel: 5
 base_seed: 42
-model_dir: ${paths.model_dir}/ra${ra}
+model_dir: ${paths.model_dir}/ra${ra}_equal
 model_name: "best_model"
 control_steps: 6
 split: "train"
@@ -24,8 +24,9 @@ env:
   episode_length: 100
   checkpoint: ${paths.data_dir}/checkpoints/${split}/ckpt_ra${ra}.h5
   heater_duration: 0.25
+  control_modes: 4
 
 # dataset configuration
 dataset:
-  type: "ppo" # types: "ppo", "random", or "zero"
+  type: "random" # types: "ppo", "random", or "zero"
   total: 20

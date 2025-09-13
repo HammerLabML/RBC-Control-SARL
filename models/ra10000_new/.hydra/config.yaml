@@ -1,0 +1,56 @@
+paths:
+  data_dir: ${hydra:runtime.cwd}/data/
+  log_dir: ${hydra:runtime.cwd}/logs/
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+  model_dir: ${hydra:runtime.cwd}/models/
+train_env:
+  use_gpu: false
+  render_mode: null
+  checkpoint: ${paths.data_dir}/checkpoints/train/ckpt_ra${ra}.h5
+  episode_length: 300
+  rayleigh_number: 10000
+  pressure: false
+  heater_limit: 0.75
+  heater_segments: 12
+  heater_duration: ${heater_duration}
+  control_modes: ${control_modes}
+  ra: ${ra}
+  reward_shaping: ${reward_shaping}
+val_env:
+  use_gpu: false
+  render_mode: null
+  checkpoint: ${paths.data_dir}/checkpoints/val/ckpt_ra${ra}.h5
+  episode_length: 300
+  rayleigh_number: 10000
+  pressure: false
+  heater_limit: 0.75
+  heater_segments: 12
+  heater_duration: ${heater_duration}
+  control_modes: ${control_modes}
+  ra: ${ra}
+  reward_shaping: 0
+task: sbsa
+tags: null
+notes: null
+seed: null
+ra: 10000
+heater_duration: 1
+reward_shaping: 0
+nr_neurons: 64
+control_modes: 4
+sb3:
+  nr_processes: 6
+  nr_eval_processes: 5
+  train_steps: 400000
+  eval_every: 10
+  train_checkpoint_every: 10
+  frame_stack: 1
+  ppo:
+    lr: 0.001
+    episodes_update: 1
+    batch_size: 600
+    gamma: 0.99
+    ent_coef: 0.01
+    vf_coef: 0.5
+    nr_neurons: ${nr_neurons}
