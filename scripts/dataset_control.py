@@ -17,7 +17,7 @@ from stable_baselines3.common.vec_env import SubprocVecEnv
 @hydra.main(version_base=None, config_path="../config", config_name="dataset")
 def main(cfg: DictConfig) -> None:
     OmegaConf.resolve(cfg)
-    
+
     def create_env(env_cfg):
         # env and wrappers
         env = gym.make(
@@ -30,10 +30,7 @@ def main(cfg: DictConfig) -> None:
         return env
 
     env = SubprocVecEnv(
-        [
-            lambda i=i: create_env(cfg.env)
-            for i in range(1, cfg.parallel + 1)
-        ]
+        [lambda i=i: create_env(cfg.env) for i in range(1, cfg.parallel + 1)]
     )
 
     # params
@@ -94,7 +91,6 @@ def main(cfg: DictConfig) -> None:
             return np.zeros((parallel_envs, segments))
         else:
             raise ValueError(f"Unknown dataset type: {cfg.dataset.type}")
-        
 
     batches = math.ceil(total_epsiodes / parallel_envs)
     for base_idx in tqdm(range(batches), position=0, desc="Total Episodes"):
@@ -102,7 +98,7 @@ def main(cfg: DictConfig) -> None:
         env.seed(base_seed + (base_idx * parallel_envs))
         obs = env.reset()
         infos = env.reset_infos
-        actions = np.zeros((parallel_envs, segments)) #zero action
+        actions = np.zeros((parallel_envs, segments))  # zero action
         for step in tqdm(range(steps), position=1, desc="Time Steps", leave=False):
             # Save observations
             for idx in range(obs.shape[0]):
@@ -114,12 +110,12 @@ def main(cfg: DictConfig) -> None:
                 with h5py.File(path, "r+") as file:
                     file[f"s-{id}"][step] = infos[idx]["state"]
                     file[f"a-{id}"][step] = actions[idx]
-            
+
             # Step environment; adapt actions every control_steps
             if step % control_steps == 0:
                 actions = get_actions(obs)
 
-            obs, _, dones, _ = env.step(actions)
+            obs, _, dones, infos = env.step(actions)
             if dones.any():
                 break
 

@@ -10,7 +10,7 @@ dependencies = [
     "hydra-core>=1.3.2",
     "moviepy==1.0.3",
     "numpy>=2.2.5",
-    "rbc-gym",
+    "rbc-gym==0.1.8",
     "seaborn>=0.13.2",
     "stable-baselines3[extra]>=2.6.0",
     "torch>=2.7.0",

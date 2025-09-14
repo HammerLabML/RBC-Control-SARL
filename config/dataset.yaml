@@ -9,12 +9,14 @@ task: dataset_control
 
 # experiment configuration
 ra: 10_000
-parallel: 5
+split: "train"
+total: 1
+
+parallel: 15
 base_seed: 42
 model_dir: ${paths.model_dir}/ra${ra}
 model_name: "best_model"
 control_steps: 6
-split: "train"
 out_dir: ${paths.data_dir}/datasets/2D-control/${split}/ra${ra}
 
 # environment
@@ -28,4 +30,4 @@ env:
 # dataset configuration
 dataset:
   type: "ppo" # types: "ppo", "random", or "zero"
-  total: 20
+  total: ${total}
