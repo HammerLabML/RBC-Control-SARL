@@ -10,7 +10,7 @@ dependencies = [
     "hydra-core>=1.3.2",
     "moviepy==1.0.3",
     "numpy>=2.2.5",
-    "rbc-gym",
+    "rbc-gym>=0.3.0",
     "seaborn>=0.13.2",
     "stable-baselines3[extra]>=2.6.0",
     "torch>=2.7.0",
@@ -37,7 +37,7 @@ torchvision = [
   { index = "pytorch-cpu", marker = "sys_platform != 'linux'" },
   { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
 ]
-rbc-gym = { git = "https://github.com/HammerLabML/RBC-Gym" }
+rbc-gym = { git = "https://github.com/HammerLabML/RBC-Gym", branch = "fourier_control" }
 
 [[tool.uv.index]]
 name = "pytorch-cpu"

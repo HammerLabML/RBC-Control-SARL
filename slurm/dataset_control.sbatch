@@ -1,15 +1,20 @@
 #!/bin/bash
-
 #SBATCH --job-name=dataset_control
 #SBATCH --partition=cpu
-#SBATCH --gres=gpu:0
-#SBATCH --cpus-per-task=23
+#SBATCH --cpus-per-task=13
 #SBATCH --mem=64G
 #SBATCH --time=1-00:00:00
-#SBATCH --output=/homes/%u/RBC-Control-SARL/logs/%x_%j.out
+#SBATCH --output=/homes/%u/RBC-Control-SARL/logs/%x_%A_%a.out
 #SBATCH --mail-type=FAIL
+#SBATCH --array=0-2
+
+# --- dataset types ---
+TYPES=("ppo" "random" "zero")
+TYPE=${TYPES[$SLURM_ARRAY_TASK_ID]}
 
 cd ~/RBC-Control-SARL
-srun uv run python scripts/dataset_control.py -m base_seed=100 split=train dataset.type=ppo,random,zero
-srun uv run python scripts/dataset_control.py -m base_seed=400 split=val dataset.type=ppo,random,zero
-srun uv run python scripts/dataset_control.py -m base_seed=800 split=test dataset.type=ppo,random,zero
+echo "Running dataset.type=$TYPE"
+
+srun uv run python scripts/dataset_control.py base_seed=100 split=train dataset.total=50 dataset.type=$TYPE
+srun uv run python scripts/dataset_control.py base_seed=400 split=val dataset.total=20 dataset.type=$TYPE
+srun uv run python scripts/dataset_control.py base_seed=800 split=test dataset.total=20 dataset.type=$TYPE

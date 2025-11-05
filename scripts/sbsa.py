@@ -70,7 +70,7 @@ def main(cfg: DictConfig) -> None:
             episode_length=env_cfg.episode_length,
             heater_duration=env_cfg.heater_duration,
             checkpoint=env_cfg.checkpoint,
-            modes=env_cfg.control_modes,
+            modes=env_cfg.modes,
         )
         env = RBCNormalizeObservation(env, heater_limit=env_cfg.heater_limit)
         env = RBCNormalizeReward(env, ra=env_cfg.ra, s=0.1, a=0.4)

@@ -42,7 +42,7 @@ def main(cfg: DictConfig) -> None:
     policy = PPO.load(model_path, env=env)
     policy.set_logger(logger)
 
-    #vis
+    # vis
     plotter = start_live_control(
         modes=env.unwrapped.modes,
         actuator_limit=env.unwrapped.actuator_limit,

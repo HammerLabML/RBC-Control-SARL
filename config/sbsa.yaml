@@ -19,19 +19,19 @@ nr_neurons: 64
 control_modes: 4
 
 train_env:
-  ra: ${ra}
+  rayleigh_number: ${ra}
   episode_length: 300
   checkpoint: "${paths.data_dir}/checkpoints/train/ckpt_ra${ra}.h5"
   heater_duration: ${heater_duration}
-  control_modes: ${control_modes}
+  modes: ${control_modes}
   reward_shaping: ${reward_shaping}
 
 val_env:
-  ra: ${ra}
+  rayleigh_number: ${ra}
   episode_length: 300
   checkpoint: "${paths.data_dir}/checkpoints/val/ckpt_ra${ra}.h5"
   heater_duration: ${heater_duration}
-  control_modes: ${control_modes}
+  modes: ${control_modes}
   reward_shaping: 0
 
 # Stable baselines 3 parameters overrides

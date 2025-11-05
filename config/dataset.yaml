@@ -8,12 +8,12 @@ defaults:
 task: dataset_control
 
 # experiment configuration
-ra: 10_000
-parallel: 5
+ra: 1_000_000
+parallel: 10
 base_seed: 42
-model_dir: ${paths.model_dir}/ra${ra}_equal
+model_dir: ${paths.model_dir}/ra10000_fourier
 model_name: "best_model"
-control_steps: 6
+control_steps: 20
 split: "train"
 out_dir: ${paths.data_dir}/datasets/2D-control/${split}/ra${ra}
 
@@ -24,9 +24,9 @@ env:
   episode_length: 100
   checkpoint: ${paths.data_dir}/checkpoints/${split}/ckpt_ra${ra}.h5
   heater_duration: 0.25
-  control_modes: 4
+  modes: 4
 
 # dataset configuration
 dataset:
   type: "random" # types: "ppo", "random", or "zero"
-  total: 20
+  total: 50

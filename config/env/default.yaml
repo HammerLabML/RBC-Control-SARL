@@ -9,6 +9,6 @@ rayleigh_number: 10_000
 pressure: False
 # action config
 heater_limit: 0.75
-heater_segments: 12
 heater_duration: 1.0
-control_modes: 6
+coeff_scheme: equal
+modes: 6
