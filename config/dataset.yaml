@@ -9,7 +9,7 @@ task: dataset_control
 
 # experiment configuration
 ra: 1_000_000
-parallel: 10
+parallel: 2
 base_seed: 42
 model_dir: ${paths.model_dir}/ra10000_fourier
 model_name: "best_model"
@@ -28,5 +28,5 @@ env:
 
 # dataset configuration
 dataset:
-  type: "random" # types: "ppo", "random", or "zero"
-  total: 50
+  type: "zero" # types: "ppo", "random", or "zero"
+  total: 2

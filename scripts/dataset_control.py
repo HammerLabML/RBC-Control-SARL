@@ -39,7 +39,7 @@ def main(cfg: DictConfig) -> None:
     modes = env.get_attr("modes")[0]
 
     base_seed = cfg.base_seed
-    total_epsiodes = cfg.dataset.total
+    total_episodes = cfg.dataset.total
     parallel_envs = cfg.parallel
     control_steps = cfg.control_steps
 
@@ -52,7 +52,7 @@ def main(cfg: DictConfig) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with h5py.File(path, "w") as file:
         # Save commonly used parameters of the simulation
-        file.attrs["episodes"] = total_epsiodes
+        file.attrs["episodes"] = total_episodes
         file.attrs["steps"] = steps
         file.attrs["ra"] = cfg.env.rayleigh_number
         file.attrs["shape"] = shape
@@ -81,44 +81,43 @@ def main(cfg: DictConfig) -> None:
                 dtype=np.float32,
             )
 
-    # Run environment and save observations
-    def get_actions(obs):
-        t = cfg.dataset.type
-        if t == "ppo":
-            return policy.predict(obs)[0]
-        elif t == "random":
-            return np.array([env.action_space.sample() for _ in range(obs.shape[0])])
-        elif t == "zero":
-            return np.zeros((parallel_envs, 2 * modes))
-        else:
-            raise ValueError(f"Unknown dataset type: {cfg.dataset.type}")
+        # Function to get actions based on dataset type
+        def get_actions(obs):
+            t = cfg.dataset.type
+            if t == "ppo":
+                return policy.predict(obs)[0]
+            elif t == "random":
+                return np.array(
+                    [env.action_space.sample() for _ in range(obs.shape[0])]
+                )
+            elif t == "zero":
+                return np.zeros((parallel_envs, 2 * modes))
+            else:
+                raise ValueError(f"Unknown dataset type: {cfg.dataset.type}")
 
-    batches = math.ceil(total_epsiodes / parallel_envs)
-    for base_idx in tqdm(range(batches), position=0, desc="Total Episodes"):
-        # episode loop
-        env.seed(base_seed + (base_idx * parallel_envs))
-        obs = env.reset()
-        infos = env.reset_infos
-        actions = np.zeros((parallel_envs, 2 * modes))  # zero action
-        for step in tqdm(range(steps), position=1, desc="Time Steps", leave=False):
-            # Save observations
-            for idx in range(obs.shape[0]):
-                # don't save if id exceeds total episodes
-                id = base_idx * parallel_envs + idx
-                if id >= total_epsiodes:
-                    continue
-                # Save state, action, and nusselt number
-                with h5py.File(path, "r+") as file:
+        batches = math.ceil(total_episodes / parallel_envs)
+        for base_idx in tqdm(range(batches), position=0, desc="Total Episodes"):
+            # episode loop
+            env.seed(base_seed + (base_idx * parallel_envs))
+            obs = env.reset()
+            infos = env.reset_infos
+            actions = np.zeros((parallel_envs, 2 * modes))  # zero action
+            for step in tqdm(range(steps), position=1, desc="Time Steps", leave=False):
+                # Step environment; adapt actions every control_steps
+                if step % control_steps == 0:
+                    actions = get_actions(obs)
+
+                # Save observations
+                for idx in range(obs.shape[0]):
+                    # don't save if id exceeds total episodes
+                    id = base_idx * parallel_envs + idx
+                    if id >= total_episodes:
+                        continue
+                    # Save state, action, and nusselt number
                     file[f"states{id}"][step] = infos[idx]["state"]
                     file[f"actions{id}"][step] = actions[idx]
 
-            # Step environment; adapt actions every control_steps
-            if step % control_steps == 0:
-                actions = get_actions(obs)
-
-            obs, _, dones, _ = env.step(actions)
-            if dones.any():
-                break
+                obs, _, _, infos = env.step(actions)
 
     env.close()
 
