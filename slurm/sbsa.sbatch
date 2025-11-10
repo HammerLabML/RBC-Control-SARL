@@ -10,4 +10,4 @@
 #SBATCH --mail-type=FAIL
 
 cd ~/RBC-Control-SARL
-srun uv run python scripts/sbsa.py reward_shaping=0.25 ra=300000
+srun uv run python scripts/sbsa.py reward_shaping=0 ra=10000 heater_segments=10

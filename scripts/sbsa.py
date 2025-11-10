@@ -135,9 +135,9 @@ def main(cfg: DictConfig) -> None:
     )
 
     callbacks = [
-        NusseltCallbackSB3(),
         eval_cb,
         checkpoint_cb_training,
+        NusseltCallbackSB3(),
         WandbCallback(
             verbose=1,
         ),

@@ -16,18 +16,19 @@ ra: 10_000
 heater_duration: 1
 reward_shaping: 0.25
 nr_neurons: 64
+heater_segments: 12
 
 train_env:
   rayleigh_number: ${ra}
   episode_length: 300
-  heater_segments: 6
+  heater_segments: ${heater_segments}
   checkpoint: "${paths.data_dir}/checkpoints/train/ckpt_ra${ra}.h5"
   heater_duration: ${heater_duration}
 
 val_env:
   rayleigh_number: ${ra}
   episode_length: 300
-  heater_segments: 6
+  heater_segments: ${heater_segments}
   checkpoint: "${paths.data_dir}/checkpoints/val/ckpt_ra${ra}.h5"
   heater_duration: ${heater_duration}
 
