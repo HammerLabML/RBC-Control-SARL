@@ -1,12 +1,12 @@
 import gymnasium as gym
 import numpy as np
-from .controller import Controller
+from .controller import Policy
 
 
 def integrate(
     env: gym.Env,
     callbacks: list[callable] = [],
-    controller: Controller = None,
+    policy: Policy = None,
     seed: int | None = None,
     episode_idx: int = 0,
 ):
@@ -16,8 +16,8 @@ def integrate(
     # Run environment
     while True:
         # Controller
-        if controller is not None:
-            action = controller(env, obs, info)
+        if policy is not None:
+            action, _ = policy.predict(obs)
         # Simulation step
         obs, reward, terminated, truncated, info = env.step(action)
         # Render

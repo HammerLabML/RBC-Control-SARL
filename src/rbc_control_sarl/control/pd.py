@@ -1,14 +1,15 @@
 import logging
 from typing import List
 
+import gymnasium as gym
 import numpy as np
 from rbc_gym.envs.rbc2D import RBCField
 
-from .controller import Controller
+from .controller import Policy
 from .utils import segmentize_control
 
 
-class PDController(Controller):
+class PDPolicy(Policy):
     logger = logging.getLogger(__name__)
 
     def __init__(
@@ -17,12 +18,11 @@ class PDController(Controller):
         kd: float,
         bcT: List[float],
         limit: float,
-        start: float,
-        end: float,
         heater_duration: float,
         heater_segments: int,
+        env: gym.Env,
     ) -> None:
-        super().__init__(start, end)
+        super().__init__(env)
         self.kp = kp
         self.kd = kd
         self.bcT = bcT
@@ -32,25 +32,24 @@ class PDController(Controller):
 
         self._last_error = None
 
-    def __call__(self, env, obs, info) -> float:
-        if super().__call__(env, obs, info):
-            # Get input and error term
-            error = self.optimal_conductive_state(obs)
-            error = segmentize_control(error, self.heater_segments)
+    def predict(self, obs):
+        # Get input and error term
+        error = self.optimal_conductive_state(obs)
+        error = segmentize_control(error, self.heater_segments)
 
-            # Compute change in error
-            d_error = error - (
-                self._last_error if (self._last_error is not None) else error
-            )
+        # Compute change in error
+        d_error = error - (
+            self._last_error if (self._last_error is not None) else error
+        )
 
-            # compute control
-            control = (self.kp * error) + (self.kd * d_error / self.duration)
-            self.control = np.clip(control, -1, 1)
+        # compute control
+        control = (self.kp * error) + (self.kd * d_error / self.duration)
+        self.control = np.clip(control, -1, 1)
 
-            # Save states
-            self._last_error = error
+        # Save states
+        self._last_error = error
 
-        return self.control
+        return self.control, None
 
     def midline_temperature(self, state):
         """Singer and Bau 1917"""

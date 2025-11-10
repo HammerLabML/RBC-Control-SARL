@@ -4,7 +4,7 @@ import gymnasium as gym
 from .controller import Policy
 
 
-class RandomPolicy(Policy):
+class ZeroPolicy(Policy):
     # def __init__(
     #     self,
     #     env: gym.Env
@@ -12,4 +12,4 @@ class RandomPolicy(Policy):
     #     super().__init__(env)
 
     def predict(self, env):
-        return env.action_space.sample(), None
+        return env.action_space.sample() * 0, None

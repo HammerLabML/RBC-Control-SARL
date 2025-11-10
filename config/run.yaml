@@ -9,9 +9,10 @@ seed: null
 interval: 1
 
 env:
-  ra: 10_000
+  rayleigh_number: 10_000
   episode_length: 300
   heater_duration: 1.0
+  render_mode: human
 
 hydra:
   job:

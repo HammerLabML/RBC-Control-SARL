@@ -1,13 +1,13 @@
-from .controller import Controller
-from .pd import PDController
-from .random import RandomController
+from .controller import Policy
+from .pd import PDPolicy
+from .random import RandomPolicy
 from .utils import integrate, segmentize_control, normalize_control
 
 __all__ = [
-    "Controller",
+    "Policy",
     "ZeroController",
-    "RandomController",
-    "PDController",
+    "RandomPolicy",
+    "PDPolicy",
     "integrate",
     "segmentize_control",
     "normalize_control",

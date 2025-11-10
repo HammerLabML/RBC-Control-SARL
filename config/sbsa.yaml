@@ -13,23 +13,23 @@ notes: null
 seed: null
 
 ra: 10_000
-heater_duration: 1.5
+heater_duration: 1
 reward_shaping: 0
 nr_neurons: 64
 
 train_env:
-  ra: ${ra}
+  rayleigh_number: ${ra}
   episode_length: 300
+  heater_segments: 8
   checkpoint: "${paths.data_dir}/checkpoints/train/ckpt_ra${ra}.h5"
   heater_duration: ${heater_duration}
-  reward_shaping: ${reward_shaping}
 
 val_env:
-  ra: ${ra}
+  rayleigh_number: ${ra}
   episode_length: 300
+  heater_segments: 8
   checkpoint: "${paths.data_dir}/checkpoints/val/ckpt_ra${ra}.h5"
   heater_duration: ${heater_duration}
-  reward_shaping: 0
 
 # Stable baselines 3 parameters overrides
 sb3:

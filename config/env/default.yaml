@@ -2,9 +2,9 @@
 use_gpu: false
 render_mode: null
 # checkpoint
-checkpoint: "${paths.data_dir}/checkpoints/test/ckpt_ra${ra}.h5"
+checkpoint: "${paths.data_dir}/checkpoints/test/ckpt_ra${env.rayleigh_number}.h5"
 # simulation
-episode_length: 120
+episode_length: 200
 rayleigh_number: 10_000
 pressure: False
 # action config
