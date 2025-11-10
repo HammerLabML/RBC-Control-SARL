@@ -23,7 +23,7 @@ out_dir: ${paths.data_dir}/datasets/2D-control/${split}/ra${ra}
 env:
   render_mode: null
   rayleigh_number: ${ra}
-  episode_length: 200
+  episode_length: 300
   checkpoint: ${paths.data_dir}/checkpoints/${split}/ckpt_ra${ra}.h5
   heater_duration: 1.0
 
