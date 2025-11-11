@@ -5,7 +5,7 @@ import gymnasium as gym
 import numpy as np
 from rbc_gym.envs.rbc2D import RBCField
 
-from .controller import Policy
+from .policy import Policy
 from .utils import segmentize_control
 
 
@@ -20,6 +20,7 @@ class PDPolicy(Policy):
         limit: float,
         heater_duration: float,
         heater_segments: int,
+        obs_shape: List[int],
         env: gym.Env,
     ) -> None:
         super().__init__(env)
@@ -29,10 +30,14 @@ class PDPolicy(Policy):
         self.limit = limit
         self.duration = heater_duration
         self.heater_segments = heater_segments
+        self.obs_shape = obs_shape
 
         self._last_error = None
 
-    def predict(self, obs):
+    def call(self, obs):
+        # reshape obs
+        obs = obs.reshape(self.obs_shape)
+
         # Get input and error term
         error = self.optimal_conductive_state(obs)
         error = segmentize_control(error, self.heater_segments)
@@ -49,7 +54,7 @@ class PDPolicy(Policy):
         # Save states
         self._last_error = error
 
-        return self.control, None
+        return self.control
 
     def midline_temperature(self, state):
         """Singer and Bau 1917"""

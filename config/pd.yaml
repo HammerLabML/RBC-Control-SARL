@@ -25,3 +25,4 @@ pd:
   limit: ${env.heater_limit}
   heater_duration: ${env.heater_duration}
   heater_segments: ${env.heater_segments}
+  obs_shape: [3, 8, 48]

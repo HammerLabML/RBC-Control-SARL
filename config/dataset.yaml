@@ -5,29 +5,39 @@ defaults:
   - _self_
 
 # wandb configuration
-task: dataset_control
+task: generate_dataset
 
 # experiment configuration
-ra: 10_000
 split: "train"
-total: 1
+type: "ppo" # types: "ppo", "random", "pd", or "zero"
+total: 20
+parallel: 10
 
-parallel: 2
+ra: 10_000
 base_seed: 42
-model_dir: ${paths.model_dir}/ra${ra}
-model_name: "best_model"
-control_steps: 1
 out_dir: ${paths.data_dir}/datasets/2D-control/${split}/ra${ra}
 
 # environment
 env:
-  render_mode: null
+  render_mode: human
   rayleigh_number: ${ra}
   episode_length: 300
   checkpoint: ${paths.data_dir}/checkpoints/${split}/ckpt_ra${ra}.h5
   heater_duration: 1.0
+  heater_segments: 6
 
-# dataset configuration
-dataset:
-  type: "random" # types: "ppo", "random", or "zero"
-  total: ${total}
+ppo:
+  model_dir: ${paths.model_dir}/ra${ra}
+  model_name: "v1"
+
+random:
+  steps: 10
+
+pd:
+  kp: 970
+  kd: 2000
+  bcT: [2, 1]
+  limit: ${env.heater_limit}
+  heater_duration: ${env.heater_duration}
+  heater_segments: ${env.heater_segments}
+  obs_shape: [3, 8, 48]

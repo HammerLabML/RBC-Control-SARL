@@ -1,6 +1,6 @@
 import gymnasium as gym
 import numpy as np
-from .controller import Policy
+from .policy import Policy
 
 
 def integrate(
@@ -17,7 +17,7 @@ def integrate(
     while True:
         # Controller
         if policy is not None:
-            action, _ = policy.predict(obs)
+            action, _ = policy(obs)
         # Simulation step
         obs, reward, terminated, truncated, info = env.step(action)
         # Render

@@ -1,6 +1,7 @@
+import rbc_gym  # noqa: F401
+import juliacall  # noqa: F401
 import math
 from omegaconf import DictConfig, OmegaConf
-import rbc_gym  # noqa: F401
 import os
 from os.path import join
 import numpy as np
@@ -9,28 +10,31 @@ import gymnasium as gym
 from tqdm import tqdm
 import h5py
 from gymnasium.wrappers import FlattenObservation, FrameStackObservation
-from rbc_gym.wrappers import RBCNormalizeObservation
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv
+from rbc_gym.wrappers import RBCNormalizeObservation
+from rbc_control_sarl.control import PDPolicy, RandomPolicy, ZeroPolicy
 
 
 @hydra.main(version_base=None, config_path="../config", config_name="dataset")
 def main(cfg: DictConfig) -> None:
-    OmegaConf.resolve(cfg)
+    # config convert
+    cfg = OmegaConf.to_container(cfg, resolve=True)
 
+    # env creation
     def create_env(env_cfg):
         # env and wrappers
         env = gym.make(
             "rbc_gym/RayleighBenardConvection2D-v0",
             **env_cfg,
         )
-        env = RBCNormalizeObservation(env, heater_limit=env_cfg.heater_limit)
+        env = RBCNormalizeObservation(env, heater_limit=env_cfg["heater_limit"])
         env = FlattenObservation(env)
         env = FrameStackObservation(env, stack_size=1)
         return env
 
     env = SubprocVecEnv(
-        [lambda i=i: create_env(cfg.env) for i in range(1, cfg.parallel + 1)]
+        [lambda i=i: create_env(cfg["env"]) for i in range(1, cfg["parallel"] + 1)]
     )
 
     # params
@@ -38,32 +42,44 @@ def main(cfg: DictConfig) -> None:
     steps = env.get_attr("episode_steps")[0]
     segments = env.get_attr("heater_segments")[0]
 
-    base_seed = cfg.base_seed
-    total_episodes = cfg.dataset.total
-    parallel_envs = cfg.parallel
-    control_steps = cfg.control_steps
+    base_seed = cfg["base_seed"]
+    total_episodes = cfg["total"]
+    parallel_envs = cfg["parallel"]
+    control_steps = 1
 
-    # load trained policy
-    model_path = join(cfg.model_dir, "model", cfg.model_name)
-    policy = PPO.load(model_path, env=env)
+    # load policy
+    policy_type = cfg["type"]
+    if policy_type == "ppo":
+        ppo = cfg["ppo"]
+        model_path = join(ppo["model_dir"], ppo["model_name"], "model")
+        policy = PPO.load(model_path, env=env)
+    elif policy_type == "pd":
+        pd = cfg["pd"]
+        policy = PDPolicy(env=env, **pd)
+    elif policy_type == "random":
+        random = cfg["random"]
+        policy = RandomPolicy(env=env)
+        control_steps = random["steps"]
+    elif policy_type == "zero":
+        policy = ZeroPolicy(env=env)
+    else:
+        raise ValueError(f"Unknown policy type: {policy_type}")
 
     # Set up h5 dataset
-    path = f"{cfg.out_dir}/{cfg.dataset.type}.h5"
+    path = f"{cfg['out_dir']}/{cfg['type']}.h5"
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with h5py.File(path, "w") as file:
         # Save commonly used parameters of the simulation
         file.attrs["episodes"] = total_episodes
         file.attrs["steps"] = steps
-        file.attrs["ra"] = cfg.env.rayleigh_number
         file.attrs["shape"] = shape
-        file.attrs["dt"] = cfg.env.heater_duration
-        file.attrs["timesteps"] = cfg.env.episode_length
-        file.attrs["limit"] = cfg.env.heater_limit
         file.attrs["base_seed"] = base_seed
-        file.attrs["control_steps"] = control_steps
-        file.attrs["heater_segments"] = segments
+        file.attrs["ra"] = cfg["env"]["rayleigh_number"]
+        file.attrs["dt"] = cfg["env"]["heater_duration"]
+        file.attrs["timesteps"] = cfg["env"]["episode_length"]
+        file.attrs["limit"] = cfg["env"]["heater_limit"]
 
-        for i in range(cfg.dataset.total):
+        for i in range(cfg["total"]):
             # states
             file.create_dataset(
                 f"states{i}",
@@ -81,20 +97,6 @@ def main(cfg: DictConfig) -> None:
                 dtype=np.float32,
             )
 
-        # Function to get actions based on dataset type
-        def get_actions(obs):
-            t = cfg.dataset.type
-            if t == "ppo":
-                return policy.predict(obs)[0]
-            elif t == "random":
-                return np.array(
-                    [env.action_space.sample() for _ in range(obs.shape[0])]
-                )
-            elif t == "zero":
-                return np.zeros((parallel_envs, segments))
-            else:
-                raise ValueError(f"Unknown dataset type: {cfg.dataset.type}")
-
         batches = math.ceil(total_episodes / parallel_envs)
         for base_idx in tqdm(range(batches), position=0, desc="Total Episodes"):
             # episode loop
@@ -105,7 +107,7 @@ def main(cfg: DictConfig) -> None:
             for step in tqdm(range(steps), position=1, desc="Time Steps", leave=False):
                 # Step environment; adapt actions every control_steps
                 if step % control_steps == 0:
-                    actions = get_actions(obs)
+                    actions, _ = policy.predict(obs)
 
                 # Save observations
                 for idx in range(obs.shape[0]):
@@ -118,6 +120,7 @@ def main(cfg: DictConfig) -> None:
                     file[f"actions{id}"][step] = actions[idx]
 
                 obs, _, _, infos = env.step(actions)
+                env.render()
 
     env.close()
 
